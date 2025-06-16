@@ -6,26 +6,17 @@
 #include <cctype>
 
 //split a string by whitespace, handles multiple consecutive spaces
-std::vector<std::string> splitByWhitespace(std::string text) {
-  std::vector<std::string> result;
-  std::string word = "";
-  
-  for (char c : text) {
-    if (std::isspace(c)) {  
-      if (!word.empty()) {
-        result.push_back(word);
-        word = "";
-      }
-    } else {
-      word += c;
-    }
-  }
+std::vector<std::string> splitByWhitespace(std::string s)
+{
+  std::vector<std::string> words;
+  std::istringstream iss(s);
+  std::string word;
 
-  if (!word.empty()) {
-    result.push_back(word);
+  while (iss >> word) 
+  {
+    words.push_back(word);
   }
-  
-  return result;
+  return words;
 }
 
 // quick sort implementation
