@@ -72,7 +72,17 @@ int Part1(const std::vector<Robot>& robots) {
             quadrantCount[3]++; // 第四象限
         }
     }
-    return quadrantCount[0] * quadrantCount[1] * quadrantCount[2] * quadrantCount[3];
+    // 输出各象限内机器人数量
+    std::cout << "---Part1---" << std::endl;
+    std::cout << "象限内机器人数量: " << std::endl;
+    std::cout << "第一象限: " << quadrantCount[0] << std::endl;
+    std::cout << "第二象限: " << quadrantCount[1] << std::endl;
+    std::cout << "第三象限: " << quadrantCount[2] << std::endl;
+    std::cout << "第四象限: " << quadrantCount[3] << std::endl;
+    // 计算安全系数
+    int safetyFactor = quadrantCount[0] * quadrantCount[1] * quadrantCount[2] * quadrantCount[3];
+    std::cout << "安全系数: " << safetyFactor << std::endl;
+    return safetyFactor;
 }
 
 /* Part 2 */
@@ -80,10 +90,9 @@ int Part1(const std::vector<Robot>& robots) {
  * 画布中机器人按照各自的速度移动
  * 大部分机器人会在某个时刻形成圣诞树形状
  * 计算形成圣诞树形状的时刻，并返回该时刻
- * 题目没有给出具体的圣诞树形状定义，因此这里假设圣诞树必然会形成3*3的机器人集群作为判断条件 
+ * 题目没有给出具体的圣诞树形状定义，因此这里假设圣诞树必然会形成3*3的机器人集群作为判断条件
  */
 int Part2(const std::vector<Robot>& robots) {
-    // TODO: 在这里编写 Part 2 的代码
     for (int t = 0; t < 10000; ++t) {
         std::vector<std::vector<bool>> canvas(HEIGHT, std::vector<bool>(WIDTH, false));
         for (const Robot& robot : robots) {
@@ -103,6 +112,15 @@ int Part2(const std::vector<Robot>& robots) {
                     canvas[y][x-1] && canvas[y][x+1] &&
                     canvas[y-1][x-1] && canvas[y-1][x+1] &&
                     canvas[y+1][x-1] && canvas[y+1][x+1]) {
+                    // 输出画布
+                    std::cout << "---Part2---" << std::endl;
+                    std::cout << "形成圣诞树形状的时刻: " << t << std::endl;
+                    for (int i = 0; i < HEIGHT; ++i) {
+                        for (int j = 0; j < WIDTH; ++j) {
+                            std::cout << (canvas[i][j] ? '#' : '.');
+                        }
+                        std::cout << std::endl;
+                    }
                     return t; // 返回形成圣诞树形状的时刻
                 }
             }
