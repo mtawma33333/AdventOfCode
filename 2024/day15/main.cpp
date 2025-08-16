@@ -53,10 +53,7 @@ struct box
   {
   }
 
-  bool operator==(const box &other) const
-  {
-    return pos1 == other.pos1 && pos2 == other.pos2;
-  }
+  bool operator==(const box &) const = default;
 };
 
 struct robot

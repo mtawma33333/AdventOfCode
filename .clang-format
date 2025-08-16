@@ -1,0 +1,140 @@
+# C++ 代码格式化配置文件
+# 这个文件定义了代码的格式化规则
+---
+# === 基本设置 ===
+Standard: c++20 # 使用 C++20 标准
+TabWidth: 2 # Tab 键宽度设置为 2 个空格
+
+# === 基本缩进和对齐设置 ===
+AccessModifierOffset: -4 # public/private 等访问修饰符的缩进偏移 (-4表示向左缩进4个空格)
+AlignAfterOpenBracket: Align # 函数参数在括号后对齐
+AlignConsecutiveAssignments: false # 不对齐连续的赋值语句 (如 a = 1; bb = 2; 不会对齐等号)
+AlignConsecutiveDeclarations: false # 不对齐连续的变量声明
+AlignEscapedNewlines: Left # 反斜杠换行符左对齐
+AlignOperands: true # 对齐操作数 (如二元运算符的左右操作数)
+AlignTrailingComments: false # 不对齐行尾注释
+
+# === 单行代码控制 ===
+AllowAllParametersOfDeclarationOnNextLine: false # 不允许函数声明的所有参数都放在下一行
+AllowShortBlocksOnASingleLine: false # 不允许短代码块写在一行 (如 if(x) {return;})
+AllowShortCaseLabelsOnASingleLine: false # 不允许短的 case 标签写在一行
+AllowShortFunctionsOnASingleLine: None # 不允许任何函数写在一行
+AllowShortIfStatementsOnASingleLine: false # 不允许短的 if 语句写在一行
+AllowShortLoopsOnASingleLine: false # 不允许短的循环写在一行
+
+# === 换行控制 ===
+AlwaysBreakAfterDefinitionReturnType: None # 函数定义的返回类型不强制换行
+AlwaysBreakAfterReturnType: None # 函数声明的返回类型不强制换行
+AlwaysBreakBeforeMultilineStrings: false # 多行字符串前不强制换行
+AlwaysBreakTemplateDeclarations: true # 模板声明总是换行
+
+# === 参数打包设置 ===
+BinPackArguments: true # 允许函数调用的参数紧密打包在一行
+BinPackParameters: true # 允许函数声明的参数紧密打包在一行
+
+# === 大括号换行设置 ===
+BraceWrapping:
+  AfterClass: true # 类定义后的大括号换行
+  AfterControlStatement: true # 控制语句后的大括号换行
+  AfterEnum: true # 枚举定义后的大括号换行
+  AfterFunction: true # 函数定义后的大括号换行
+  AfterNamespace: true # 命名空间后的大括号换行
+  AfterObjCDeclaration: true # Objective-C 声明后换行
+  AfterStruct: true # 结构体定义后的大括号换行
+  AfterUnion: true # 联合体定义后的大括号换行
+  AfterExternBlock: true # extern 块后的大括号换行
+  BeforeCatch: true # catch 前的大括号换行
+  BeforeElse: true # else 前的大括号换行
+  IndentBraces: false # 大括号本身不缩进
+  SplitEmptyFunction: true # 空函数的大括号分行
+  SplitEmptyRecord: true # 空类/结构体的大括号分行
+  SplitEmptyNamespace: true # 空命名空间的大括号分行
+
+# === 更多换行控制 ===
+BreakBeforeBinaryOperators: None # 二元运算符不在前面换行
+BreakBeforeBraces: Custom # 使用自定义大括号风格 (BraceWrapping)
+BreakBeforeInheritanceComma: false # 继承列表的逗号不在前面换行
+BreakBeforeTernaryOperators: false # 三元运算符不在前面换行
+BreakConstructorInitializersBeforeComma: false # 构造函数初始化列表的逗号不在前面换行
+#BreakConstructorInitializers: BeforeComma
+BreakAfterJavaFieldAnnotations: false # Java 字段注解后不换行
+BreakStringLiterals: false # 不自动断开长字符串
+
+# === 基本格式设置 ===
+ColumnLimit: 120 # 每行最大字符数限制
+CommentPragmas: '^ IWYU pragma:' # 特殊注释的正则表达式 (IWYU = Include What You Use)
+CompactNamespaces: false # 不压缩命名空间 (如 namespace A::B 展开为 namespace A { namespace B)
+ConstructorInitializerAllOnOneLineOrOnePerLine: true # 构造函数初始化要么全在一行，要么每个一行
+ConstructorInitializerIndentWidth: 4 # 构造函数初始化列表的缩进宽度 (4个空格)
+ContinuationIndentWidth: 4 # 续行的缩进宽度 (4个空格)
+
+# === C++11 特性设置 ===
+Cpp11BracedListStyle: false # 不使用C++11的大括号列表风格
+DerivePointerAlignment: false # 不从现有代码推导指针对齐方式
+DisableFormat: false # 启用格式化 (不禁用)
+ExperimentalAutoDetectBinPacking: false # 不自动检测参数打包
+FixNamespaceComments: false # 不自动修复命名空间注释
+
+# === 头文件包含设置 ===
+IncludeBlocks: Preserve # 保持现有的 #include 分组
+IncludeCategories: # 头文件分类规则
+  - Regex: '.*' # 匹配所有头文件
+    Priority: 1 # 优先级为1
+IncludeIsMainRegex: '(Test)?$' # 主文件的正则表达式
+# === 缩进设置 ===
+IndentCaseLabels: false # switch 语句的 case 标签不额外缩进
+IndentGotoLabels: false # goto 标签不缩进
+IndentPPDirectives: None # 预处理指令 (#include, #define等) 不缩进
+IndentWidth: 2 # 基本缩进宽度 (2个空格)
+IndentWrappedFunctionNames: false # 换行的函数名不额外缩进
+
+# === JavaScript 设置 ===
+JavaScriptQuotes: Leave # JavaScript 引号风格 (保持原样)
+JavaScriptWrapImports: true # JavaScript import 语句换行
+
+# === 空行和空格控制 ===
+KeepEmptyLinesAtTheStartOfBlocks: false # 不在代码块开始处保留空行
+MacroBlockBegin: '' # 宏块开始标记 (空)
+MacroBlockEnd: '' # 宏块结束标记 (空)
+MaxEmptyLinesToKeep: 1 # 最多保留1个连续空行
+NamespaceIndentation: None # 命名空间内容不额外缩进
+
+# === Objective-C 设置 ===
+ObjCBinPackProtocolList: Auto # Objective-C 协议列表自动打包
+ObjCBlockIndentWidth: 2 # Objective-C 块缩进宽度 (2个空格)
+ObjCSpaceAfterProperty: true # Objective-C property 后加空格
+ObjCSpaceBeforeProtocolList: true # Objective-C 协议列表前加空格
+
+# === 换行惩罚设置 ===
+# 这些数值越大，clang-format越不愿意在该位置换行
+PenaltyBreakAssignment: 10 # 在赋值操作处换行的惩罚值
+PenaltyBreakBeforeFirstCallParameter: 30 # 在第一个函数参数前换行的惩罚值
+PenaltyBreakComment: 10 # 在注释中换行的惩罚值
+PenaltyBreakFirstLessLess: 0 # 在第一个 << 操作符前换行的惩罚值 (流操作)
+PenaltyBreakString: 10 # 在字符串中换行的惩罚值
+PenaltyExcessCharacter: 100 # 超过行长度限制的每个字符的惩罚值
+PenaltyReturnTypeOnItsOwnLine: 60 # 返回类型单独一行的惩罚值
+
+# === 指针和引用对齐 ===
+PointerAlignment: Right # 指针符号靠右对齐 如: int *ptr, char *str
+
+# === 注释和排序设置 ===
+ReflowComments: false # 不重新格式化注释 (保持原有换行)
+SortIncludes: false # 不对 #include 语句排序
+SortUsingDeclarations: false # 不对 using 声明排序
+
+# === 空格设置 ===
+SpaceAfterCStyleCast: false # C风格类型转换后不加空格    如: (int)x 而非 (int) x
+SpaceAfterTemplateKeyword: true # template 关键字后加空格     如: template <typename T>
+SpaceBeforeAssignmentOperators: true # 赋值运算符前加空格          如: a = b 而非 a= b
+SpaceBeforeCtorInitializerColon: true # 构造函数初始化冒号前加空格  如: A() : b(1)
+SpaceBeforeInheritanceColon: true # 继承冒号前加空格            如: class B : public A
+SpaceBeforeParens: ControlStatementsExceptControlMacros # 控制语句的括号前加空格 如: if (x), for (;;)
+SpaceBeforeRangeBasedForLoopColon: true # 范围for循环冒号前加空格     如: for (auto x : vec)
+SpaceInEmptyParentheses: false # 空括号内不加空格            如: func() 而非 func( )
+SpacesBeforeTrailingComments: 1 # 行尾注释前加1个空格         如: int a; // comment
+SpacesInAngles: false # 尖括号内不加空格            如: vector<int> 而非 vector< int >
+SpacesInContainerLiterals: false # 容器字面量内不加空格        如: {1,2,3} 而非 { 1, 2, 3 }
+SpacesInCStyleCastParentheses: false # C风格转换括号内不加空格     如: (int)x 而非 ( int )x
+SpacesInParentheses: false # 普通括号内不加空格          如: func(a) 而非 func( a )
+SpacesInSquareBrackets: false # 方括号内不加空格            如: arr[i] 而非 arr[ i ]

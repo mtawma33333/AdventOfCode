@@ -1,0 +1,166 @@
+# C++ 代码静态分析配置文件 (clang-tidy)
+# 这个文件定义了代码质量检查规则，帮助发现潜在的错误、性能问题和风格问题
+---
+# === 基本配置 ===
+FormatStyle: 'file' # 使用项目中的 .clang-format 文件作为格式化标准
+SystemHeaders: false # 不分析系统头文件 (如 <iostream>, <vector> 等)
+WarningsAsErrors: 'readability-identifier-naming' # 将命名规范警告视为错误 (强制执行命名规范)
+
+# === 文件类型定义 ===
+HeaderFilterRegex: '.*' # 分析所有头文件的正则表达式
+HeaderFileExtensions: # 头文件扩展名列表
+  - '' # 无扩展名文件 (如 C++ 标准库头文件)
+  - h # C 风格头文件
+  - hh # C++ 头文件变种
+  - hpp # C++ 头文件 (常用)
+  - hxx # C++ 头文件变种
+ImplementationFileExtensions: # 实现文件扩展名列表
+  - c # C 源文件
+  - cc # C++ 源文件变种
+  - cpp # C++ 源文件 (常用)
+  - cxx # C++ 源文件变种
+  - ipp # C++ 内联实现文件
+
+# === 启用的检查规则 ===
+# 使用正向选择策略：先启用大类，再禁用特定不需要的检查
+Checks: '
+  # === 核心诊断检查 ===
+  clang-diagnostic-*,           # Clang 编译器诊断信息 (语法错误、类型错误等)
+  clang-analyzer-*,             # Clang 静态分析器 (空指针、内存泄漏等)
+
+  # === 启用所有其他检查 ===
+  *,                            # 启用所有可用的检查规则
+
+  # === 禁用的检查规则 (按类别分组) ===
+
+  # --- 特定平台相关检查 (不适用于通用 C++ 项目) ---
+  -altera-id-dependent-backward-branch,     # Altera FPGA 特定：禁用后向分支检查
+  -altera-unroll-loops,                     # Altera FPGA 特定：禁用循环展开检查
+  -fuchsia-default-arguments-calls,         # Fuchsia OS 特定：禁用默认参数调用检查
+  -fuchsia-default-arguments-declarations,  # Fuchsia OS 特定：禁用默认参数声明检查
+
+  # --- 代码风格相关 (与格式化规则冲突) ---
+  -google-readability-braces-around-statements,  # Google 风格：大括号规则
+  -google-readability-namespace-comments,        # Google 风格：命名空间注释
+  -hicpp-braces-around-statements,              # HICPP 风格：大括号规则
+  -readability-braces-around-statements,        # 通用：大括号规则
+
+  # --- LLVM 项目特定检查 (不适用于一般项目) ---
+  -llvmlibc-callee-namespace,               # LLVM libc：调用者命名空间检查
+  -llvmlibc-implementation-in-namespace,    # LLVM libc：实现命名空间检查
+  -llvmlibc-inline-function-decl,           # LLVM libc：内联函数声明检查
+  -llvmlibc-restrict-system-libc-headers,   # LLVM libc：限制系统头文件
+  -llvm-header-guard,                       # LLVM：头文件保护检查 (我们用 #pragma once)
+  -llvm-namespace-comment,                  # LLVM：命名空间注释 (不强制要求)
+
+  # --- 算法竞赛友好设置 ---
+  -bugprone-easily-swappable-parameters,    # 禁用：容易交换的参数检查 (算法中常见)
+  -cppcoreguidelines-avoid-magic-numbers,   # 禁用：避免魔术数字 (算法中常用常数)
+  -readability-identifier-length,           # 禁用：标识符长度检查 (允许 i, j, n 等短变量名)
+  -readability-magic-numbers,               # 禁用：魔术数字检查 (算法中常用)
+
+  # --- 现代化建议 ---
+  -modernize-use-trailing-return-type       # 禁用：使用尾随返回类型 (保持传统语法)
+  '
+
+# === 检查规则的详细配置选项 ===
+CheckOptions:
+  # --- 类型安全相关 ---
+  cppcoreguidelines-pro-type-const-cast.StrictMode: true # 严格模式：禁止 const_cast (提高类型安全)
+  readability-redundant-inline-specifier.StrictMode: true # 严格模式：移除冗余的 inline 说明符
+
+  # --- 性能优化相关 ---
+  performance-for-range-copy.WarnOnAllAutoCopies: true # 警告所有 auto 类型的拷贝 (建议使用引用)
+
+  # --- 代码现代化相关 ---
+  modernize-use-default-member-init.UseAssignment: true # 使用赋值语法进行默认成员初始化 如: int x = 0;
+
+  # --- 头文件管理相关 ---
+  misc-include-cleaner.IgnoreHeaders: '^.*(?:pch|stdafx)\.h\w*$' # 忽略预编译头文件 (pch, stdafx)
+
+  # === 命名规范配置 (严格的蛇形命名法 snake_case) ===
+  # 所有标识符都使用小写字母和下划线
+
+  # --- 类和结构体相关 ---
+  readability-identifier-naming.AbstractClassCase: 'lower_case' # 抽象类
+  readability-identifier-naming.ClassCase: 'lower_case' # 类
+  readability-identifier-naming.StructCase: 'lower_case' # 结构体
+  readability-identifier-naming.UnionCase: 'lower_case' # 联合体
+
+  # --- 成员变量和方法 ---
+  readability-identifier-naming.ClassMemberCase: 'lower_case' # 类成员
+  readability-identifier-naming.ClassMethodCase: 'lower_case' # 类方法
+  readability-identifier-naming.MemberCase: 'lower_case' # 成员
+  readability-identifier-naming.MethodCase: 'lower_case' # 方法
+  readability-identifier-naming.PublicMemberCase: 'lower_case' # 公有成员
+  readability-identifier-naming.PublicMethodCase: 'lower_case' # 公有方法
+  readability-identifier-naming.PrivateMemberCase: 'lower_case' # 私有成员
+  readability-identifier-naming.PrivateMemberPrefix: 'm_' # 私有成员前缀
+  readability-identifier-naming.PrivateMethodCase: 'lower_case' # 私有方法
+  readability-identifier-naming.ProtectedMemberCase: 'lower_case' # 保护成员
+  readability-identifier-naming.ProtectedMemberPrefix: 'm_' # 保护成员前缀
+  readability-identifier-naming.ProtectedMethodCase: 'lower_case' # 保护方法
+  readability-identifier-naming.VirtualMethodCase: 'lower_case' # 虚方法
+
+  # --- 函数相关 ---
+  readability-identifier-naming.FunctionCase: 'lower_case' # 函数
+  readability-identifier-naming.GlobalFunctionCase: 'lower_case' # 全局函数
+  readability-identifier-naming.ConstexprFunctionCase: 'lower_case' # constexpr 函数
+  readability-identifier-naming.ConstexprMethodCase: 'lower_case' # constexpr 方法
+
+  # --- 变量相关 ---
+  readability-identifier-naming.VariableCase: 'lower_case' # 变量
+  readability-identifier-naming.LocalVariableCase: 'lower_case' # 局部变量
+  readability-identifier-naming.GlobalVariableCase: 'lower_case' # 全局变量
+  readability-identifier-naming.StaticVariableCase: 'lower_case' # 静态变量
+  readability-identifier-naming.LocalPointerCase: 'lower_case' # 局部指针
+  readability-identifier-naming.GlobalPointerCase: 'lower_case' # 全局指针
+
+  # --- 常量相关 ---
+  readability-identifier-naming.ConstantCase: 'lower_case' # 常量
+  readability-identifier-naming.ClassConstantCase: 'lower_case' # 类常量
+  readability-identifier-naming.ConstantMemberCase: 'lower_case' # 常量成员
+  readability-identifier-naming.GlobalConstantCase: 'lower_case' # 全局常量
+  readability-identifier-naming.StaticConstantCase: 'lower_case' # 静态常量
+  readability-identifier-naming.LocalConstantCase: 'lower_case' # 局部常量
+  readability-identifier-naming.ConstexprVariableCase: 'lower_case' # constexpr 变量
+  readability-identifier-naming.LocalConstantPointerCase: 'lower_case' # 局部常量指针
+  readability-identifier-naming.GlobalConstantPointerCase: 'lower_case' # 全局常量指针
+
+  # --- 参数相关 ---
+  readability-identifier-naming.ParameterCase: 'lower_case' # 参数
+  readability-identifier-naming.ParameterPackCase: 'lower_case' # 参数包
+  readability-identifier-naming.PointerParameterCase: 'lower_case' # 指针参数
+  readability-identifier-naming.ConstantParameterCase: 'lower_case' # 常量参数
+  readability-identifier-naming.ConstantPointerParameterCase: 'lower_case' # 常量指针参数
+
+  # --- 枚举相关 ---
+  readability-identifier-naming.EnumCase: 'lower_case' # 枚举
+  readability-identifier-naming.EnumConstantCase: 'lower_case' # 枚举常量
+  readability-identifier-naming.ScopedEnumConstantCase: 'lower_case' # 作用域枚举常量
+
+  # --- 命名空间相关 ---
+  readability-identifier-naming.NamespaceCase: 'lower_case' # 命名空间
+  readability-identifier-naming.InlineNamespaceCase: 'lower_case' # 内联命名空间
+
+  # --- 模板相关 (带 _t 后缀) ---
+  readability-identifier-naming.TemplateParameterCase: 'lower_case' # 模板参数
+  readability-identifier-naming.TemplateParameterSuffix: '_t' # 模板参数后缀
+  readability-identifier-naming.TypeTemplateParameterCase: 'lower_case' # 类型模板参数
+  readability-identifier-naming.TypeTemplateParameterSuffix: '_t' # 类型模板参数后缀
+  readability-identifier-naming.ValueTemplateParameterCase: 'lower_case' # 值模板参数
+  readability-identifier-naming.ValueTemplateParameterSuffix: '_t' # 值模板参数后缀
+  readability-identifier-naming.TemplateTemplateParameterCase: 'lower_case' # 模板模板参数
+  readability-identifier-naming.TemplateTemplateParameterSuffix: '_t' # 模板模板参数后缀
+
+  # --- 类型别名相关 (带 _t 后缀) ---
+  readability-identifier-naming.TypeAliasCase: 'lower_case' # 类型别名
+  readability-identifier-naming.TypeAliasSuffix: '_t' # 类型别名后缀
+  readability-identifier-naming.TypedefCase: 'lower_case' # typedef
+  readability-identifier-naming.TypedefSuffix: '_t' # typedef 后缀
+
+  # --- C++20 概念 ---
+  readability-identifier-naming.ConceptCase: 'lower_case' # 概念
+
+  # --- 宏定义 ---
+  readability-identifier-naming.MacroDefinitionCase: 'UPPER_CASE' # 宏定义
