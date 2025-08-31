@@ -189,14 +189,11 @@ xy_pos_t part2(const bytes &data)
 
 int main()
 {
-  // 读取输入
   bytes data = read_file();
 
-  // 运行 Part 1
   int result = part1(data, 1024);
   std::cout << "Part 1 result: " << result << std::endl;
 
-  // 运行 Part 2
   xy_pos_t part2_result = part2(data);
   std::cout << "Part 2 result: (" << part2_result.first << ", " << part2_result.second << ")" << std::endl;
 
